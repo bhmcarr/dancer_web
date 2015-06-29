@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>JQuery Test Page</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$(".toggle").hide();
+				$(".show").click(function(){
+					$(".toggle").fadeIn();
+				});
+				$(".hide").click(function(){
+					$(".toggle").fadeOut();
+				});
+
+				$("#newContent").load("foo.html");i
+
+				$(".login_button").click(function(){
+					$.ajax({
+						type: "POST",
+						url: "/login",
+					});
+			});
+		</script>
+	</head>
+
+	<body>
+		<h1>JQuery Test Page</h1><br>
+		<button type="button" class="show">Show Content</button>
+		<button type="button" class="hide">Hide Content</button>
+
+		<form class="toggle" action="/login" method="post">
+			Username: <input type="text" name="username">
+			<br>
+			Password: <input type="password" name="password">
+			<br>
+			<input type="submit" value="Login" class="login_button"></input>
+		</form>
+
+		<p id="newContent"></p><br>
+
+	</body>
+</html>
