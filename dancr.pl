@@ -17,7 +17,7 @@ set 'warnings'     => 1;
 set 'username'     => 'admin';
 set 'password'     => 'password';
 set 'layout'       => 'main';
- 
+
 my $flash;
  
 sub set_flash {
@@ -56,20 +56,9 @@ hook before_template => sub {
 };
  
 get '/' => sub {
-       my $db = connect_db();
-       my $sql = 'select id, title, text from entries order by id desc';
-       my $sth = $db->prepare($sql) or die $db->errstr;
-       $sth->execute or die $sth->errstr;
-       template 'show_entries.tt', {
-               'msg' => get_flash(),
-               'add_entry_url' => uri_for('/add'),
-               'entries' => $sth->fetchall_hashref('id'),
-       };
+	send_file 'index.html';
+	template 'header';
 };
-
-#get '/' => sub {
-#	send_file 'index.html';
-#};
 
  
 post '/add' => sub {
@@ -86,35 +75,38 @@ post '/add' => sub {
        redirect '/';
 };
  
-any ['get', 'post'] => '/login' => sub {
-       my $err;
+post '/login' => sub {
+	my $err;
+	
+	if ( params->{'username'} ne setting('username') ) {
+		$err = "Invalid username";
+		send_error($err, 403);
+	}
+	elsif ( params->{'password'} ne setting('password') ) {
+		$err = "Invalid password";
+		send_error($err, 403);
+	}
+	else {
+		session 'logged_in' => true;
+		set_flash('You are logged in.');
+		#return redirect '/';
+    }
  
-       if ( request->method() eq "POST" ) {
-               # process form input
-               if ( params->{'username'} ne setting('username') ) {
-                       $err = "Invalid username";
-               }
-               elsif ( params->{'password'} ne setting('password') ) {
-                       $err = "Invalid password";
-               }
-               else {
-                       session 'logged_in' => true;
-                       set_flash('You are logged in.');
-                       return redirect '/';
-               }
-       }
- 
-       # display login form
-       template 'login.tt', {
-               'err' => $err,
-       };
+    # display login form
+	#template 'login.tt', {
+	#      'err' => $err,
+	#};
  
 };
  
 get '/logout' => sub {
        session->destroy;
        set_flash('You are logged out.');
-       redirect '/';
+       redirect '/logout_page';
+};
+
+get '/logout_page' => sub {
+	send_file 'logout.html';
 };
  
 init_db();
