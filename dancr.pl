@@ -6,7 +6,7 @@ use File::Spec;
 use File::Slurp;
 use Template;
  
-set 'database'     => File::Spec->catfile(File::Spec->tmpdir(), 'dancr.db');
+set 'database'     => 'database';
 set 'session'      => 'Simple';
 set 'template'     => 'template_toolkit';
 set 'logger'       => 'console';
@@ -56,8 +56,16 @@ hook before_template => sub {
 };
  
 get '/' => sub {
-	send_file 'index.html';
-	template 'header';
+	my $db = connect_db(); # returns db file handle
+	my $sql = 'select id, title, text from entries order by id desc'; # SQL code to obtain blog posts
+	my $sth = $db->prepare($sql) or die $db->errstr;
+	$sth->execute or die $sth->errstr;
+	#send_file 'index.html';
+	template 'show_entries.tt', {
+		'msg' => get_flash(),
+		'add_entry_url' => uri_for('/add'),
+		'entries' => $sth->fetchall_hashref('id'),
+	};
 };
 
  
@@ -74,28 +82,45 @@ post '/add' => sub {
        set_flash('New entry posted!');
        redirect '/';
 };
- 
-post '/login' => sub {
-	my $err;
+
+post '/remove' => sub {
+	if (not session('logged_in') ) {
+			send_error("Not logged in", 401);
+	}
 	
-	if ( params->{'username'} ne setting('username') ) {
-		$err = "Invalid username";
-		send_error($err, 403);
+	my $db = connect_db();
+	my $sql = 'delete from entries WHERE title=(?)';
+	my $sth = $db->prepare($sql) or die $db->errstr;
+	$sth->execute(params->{'title'}) or die $sth->errstr;
+
+	set_flash('Entry deleted!');
+	redirect '/';
+
+};
+ 
+any ['get', 'post'] => '/login' => sub {
+	my $err;
+
+	if (request->method() eq "POST"){
+		if ( params->{'username'} ne setting('username') ) {
+			$err = "Invalid username";
+			send_error($err, 403);
+		}	
+		elsif ( params->{'password'} ne setting('password') ) {
+			$err = "Invalid password";
+			send_error($err, 403);
+		}
+		else {
+			session 'logged_in' => true;
+			set_flash('You are logged in.');
+			return redirect '/';
+		}
 	}
-	elsif ( params->{'password'} ne setting('password') ) {
-		$err = "Invalid password";
-		send_error($err, 403);
-	}
-	else {
-		session 'logged_in' => true;
-		set_flash('You are logged in.');
-		#return redirect '/';
-    }
  
     # display login form
-	#template 'login.tt', {
-	#      'err' => $err,
-	#};
+	template 'login.tt', {
+	      'err' => $err,
+	};
  
 };
  

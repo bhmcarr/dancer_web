@@ -3,14 +3,6 @@
 <head>
   <title>Dancr</title>
   <link rel=stylesheet type=text/css href="<% css_url %>">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>i
-  <script>
-	$(document).ready(function(){
-	    $("login_form").click(function(){
-		        $("");
-				    });
-					});
-  </script>
 </head>
 <body>
   <div class=page>
@@ -18,7 +10,6 @@
      <div class=metanav>
      <% IF not session.logged_in %>
        <a href="<% login_url %>">log in</a>
-	   <button type="button">login</button>
      <% ELSE %>
        <a href="<% logout_url %>">log out</a>
      <% END %>
@@ -28,16 +19,5 @@
   <% END %>
   <% content %>
 </div>
-<form action="<% login_url %>	" class="login_form" method=post>
-	<dl>
-		<dt>Username:
-			<dd><input type=text name=username>
-		<dt>Password:
-			<dd><input type=password name=password>
-			
-			<dd><input type=submit value=Login>
-	</dl>
-</form>
-
 </body>
 </html>
