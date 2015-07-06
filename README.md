@@ -1,2 +1,4 @@
 # dancertest
 testing out Perl Dancer with a bit of Jquery and Ajax on the side
+
+This code is based on the Perl Dancer Tutorial Repo here on GitHub. A lot of code was pulled from there. I added a few of my own tweaks and features, and will continue to do so.
