@@ -1,5 +1,5 @@
-# dancertest
-testing out Perl Dancer with a bit of Jquery and Ajax on the side
+# Testing Perl Dancer
+This repo hosts the code for my tests of web server hosting using Perl Dancer.
 
 This code is based on the Perl Dancer Tutorial Repo here on GitHub. A lot of code was pulled from there. I added a few of my own tweaks and features, and will continue to do so.
 
