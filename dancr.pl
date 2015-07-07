@@ -115,7 +115,7 @@ post '/remove' => sub {
 
 };
  
-any ['get', 'post'] => '/login' => sub {
+post '/login' => sub {
 	my $err;
 
 	if (request->method() eq "POST"){
@@ -130,14 +130,14 @@ any ['get', 'post'] => '/login' => sub {
 		else {
 			session 'logged_in' => true;
 			set_flash('You are logged in.');
-			return redirect '/';
+			#return redirect '/';
 		}
 	}
  
     # display login form
-	template 'login.tt', {
-	      'err' => $err,
-	};
+	#template 'login.tt', {
+	#      'err' => $err,
+	#};
  
 };
  
