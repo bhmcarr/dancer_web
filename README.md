@@ -10,5 +10,7 @@ I am now beginning to add Ajax functionality for things like login and updating 
 
 This code can be run on a web server with Perl Dancer libraries installed. The routing is handled by Dancer, so all you need to do is run the routing program, "dancer.pl".
 
+You will need to also install Template Toolkit, File::Slurp, and DBD::SQLite.
+
 More information about Perl Dancer can be found here: http://www.perldancer.org/
 If you want to just get going with Perl Dancer, you can get it quickly installed on your system using this method: http://www.perldancer.org/quickstart
