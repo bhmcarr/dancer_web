@@ -1,5 +1,24 @@
-<% IF session.logged_in %>
-  <form action="<% add_entry_url %>" method=post class=add-entry>
+<script>
+	$(function(){
+		$(".hide_forms").hide();
+		$("#logout_button").hide();
+	});
+</script>
+<a id="logout_button" href="/logout">Log Out</a>
+<div style="color:#0000FF">
+<% IF err %><p class=error><strong>Error:</strong> <% err %><% END %>
+<form id="login_form">
+  <dl>
+    <dt>Username:
+    <dd><input type=text name=username>
+    <dt>Password:
+    <dd><input type=password name=password>
+    <dd><button type="submit">Login</button>
+  </dl>
+</form>
+</div>
+
+  <form class="hide_forms" action="<% add_entry_url %>" method=post class=add-entry>
     <dl>
       <dt>Title:
       <dd><input type=text size=30 name=title>
@@ -8,16 +27,16 @@
       <dd><input type=submit value=Share>
     </dl>
   </form>
-<form action="/edit" method=post>
+<form class="hide_forms" action="/edit" method=post>
 <dl>
 	<dt>Title of Entry to Edit:
 	<dd><input type=text size=30 name=title>
 	<dt>New Body
-	<dd><input type=text size=30 name=text>
+	<dd><textarea type=text rows=5 cols=40 name=text></textarea>
 	<dd><input type=submit value="Edit">
 </dl>
 </form>
-<form action="/remove" method=post>
+<form class="hide_forms" action="/remove" method=post>
 <dl>
 	<dt>Title of Entry to Remove:
 	<dd><input type=text size=30 name=title>
@@ -25,7 +44,7 @@
 </dl>
 
 </form>
-<% END %>
+
 <ul class=entries>
 <% IF entries.size %>
   <% FOREACH id IN entries.keys.nsort %>
@@ -35,3 +54,25 @@
   <li><em>Unbelievable.  No entries here so far</em>
 <% END %>
 </ul>
+
+<script>
+	$("#login_form").submit(function() {
+		var url = "/login";
+
+		$.ajax({
+			type:"POST",
+			url: url,
+			data: $("#login_form").serialize(),
+			success: function(data){
+				//alert(data);
+				$(".hide_forms").fadeIn();
+				$("#logout_button").fadeIn();
+				$("#login_form").fadeOut();
+			},
+			error: function(data){
+				
+			}
+		});
+		return false;
+	});
+</script>
