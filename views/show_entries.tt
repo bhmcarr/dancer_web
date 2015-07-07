@@ -8,12 +8,22 @@
       <dd><input type=submit value=Share>
     </dl>
   </form>
+<form action="/edit" method=post>
+<dl>
+	<dt>Title of Entry to Edit:
+	<dd><input type=text size=30 name=title>
+	<dt>New Body
+	<dd><input type=text size=30 name=text>
+	<dd><input type=submit value="Edit">
+</dl>
+</form>
 <form action="/remove" method=post>
 <dl>
 	<dt>Title of Entry to Remove:
 	<dd><input type=text size=30 name=title>
 	<dd><input type=submit value=Remove>
 </dl>
+
 </form>
 <% END %>
 <ul class=entries>

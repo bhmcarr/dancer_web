@@ -81,6 +81,23 @@ post '/add' => sub {
  
        set_flash('New entry posted!');
        redirect '/';
+
+};
+
+post '/edit' => sub {
+	if ( not session('logged_in') ) {
+		send_error("Not logged in", 401);
+	}
+	
+	my $db = connect_db();
+	my $sql = 'update entries set text = ? where title = ?';
+	my $sth = $db->prepare($sql) or die $db->errstr;
+	$sth->execute(params->{'text'}, params-> {'title'}) or die $sth->errstr;
+
+	set_flash('Entry modified!');
+	redirect '/';
+
+
 };
 
 post '/remove' => sub {
