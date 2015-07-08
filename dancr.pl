@@ -117,23 +117,25 @@ post '/remove' => sub {
  
 post '/login' => sub {
 	my $err;
+	
+	my $db = connect_db();
+	my $sql = "SELECT * FROM login WHERE username='";
+	$sql .= params->{'username'};
+	$sql .= "' AND password='";
+	$sql .= params->{'password'};
+	$sql .= "'";
+	set_flash($sql);
+	my $rows = $db->do($sql) or die $db->errstr;
 
-	if (request->method() eq "POST"){
-		if ( params->{'username'} ne setting('username') ) {
-			$err = "Invalid username";
-			send_error($err, 403);
-		}	
-		elsif ( params->{'password'} ne setting('password') ) {
-			$err = "Invalid password";
-			send_error($err, 403);
-		}
-		else {
-			session 'logged_in' => true;
-			set_flash('You are logged in.');
-			#return redirect '/';
-		}
+	if ( $rows ne 1 ) {
+		$err = "Invalid username or password";
+		send_error($err, 403);
+	} else {
+		session 'logged_in' => true;
+		set_flash('You are logged in.');
+		#return redirect '/';
 	}
- 
+
     # display login form
 	#template 'login.tt', {
 	#      'err' => $err,
