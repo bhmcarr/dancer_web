@@ -50,7 +50,7 @@ sub init_db {
 hook before_template => sub {
        my $tokens = shift;
         
-	   #$tokens->{'css_url'} = request->base . 'css/style.css';
+	   $tokens->{'css_url'} = request->base . 'css/style.css';
        $tokens->{'login_url'} = uri_for('/login');
        $tokens->{'logout_url'} = uri_for('/logout');
 };
