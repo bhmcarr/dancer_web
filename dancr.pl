@@ -120,14 +120,16 @@ post '/login' => sub {
 	my $db = connect_db();
 	my $username = params->{'username'};
 	my $password = params->{'password'};
-	my $sth = $db->prepare('SELECT * FROM login WHERE username=? AND password=?') or die $db->errstr;;
-	$sth->execute(params->{'username'}, params->{'password'}) or die $sth->errstr;
-	my $found = 0; #supress warning
-	$found = $sth->fetch();
-	if ($found eq 1){
-		session 'logged_in' => true;
-		set_flash('You are logged in.');
+	my $rows = $db->selectrow_array("SELECT COUNT(*) FROM login WHERE username='$username' AND password='$password'", undef);
+	if ($rows < 1){
+		set_flash('Invalid username/password.');
+		send_error('Invalid username/password');
 	}
+	else{
+		set_flash("Welcome, $username.");
+		session 'logged_in' => true;
+	}
+
 };
  
 get '/logout' => sub {
