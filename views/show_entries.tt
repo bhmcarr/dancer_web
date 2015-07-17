@@ -1,12 +1,15 @@
 <script>
+	<% IF not session.logged_in %>
 	$(function(){
 		$(".hide_forms").hide();
 		$("#logout_button").hide();
 	});
+	<% END %>
 </script>
 <a id="logout_button" href="/logout">Log Out</a>
 <div style="color:#0000FF">
 <% IF err %><p class=error><strong>Error:</strong> <% err %><% END %>
+<% IF not session.logged_in %>
 <form id="login_form">
   <dl>
     <dt>Username:
@@ -16,6 +19,7 @@
     <dd><button type="submit">Login</button>
   </dl>
 </form>
+<% END %>
 </div>
 
   <form class="hide_forms" action="<% add_entry_url %>" method=post class=add-entry>
