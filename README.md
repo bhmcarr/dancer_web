@@ -13,4 +13,4 @@ This code can be run on a web server with Perl Dancer libraries installed. The r
 You will need to also install Template Toolkit, File::Slurp, and DBD::SQLite.
 
 More information about Perl Dancer can be found here: http://www.perldancer.org/
-If you want to just get going with Perl Dancer, you can get it quickly installed on your system using this method: http://www.perldancer.org/quickstart
+If you want to simply get going with Perl Dancer, you can get it quickly installed on your system using this method: http://www.perldancer.org/quickstart
